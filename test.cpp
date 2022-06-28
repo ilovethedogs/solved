@@ -6,7 +6,7 @@
 
 int main() {
     std::string compressed {};
-    std::string chars {"abccdee"};
+    std::string chars {"aaaee"};
     char cur_ch {};
     int cur_cnt {0};
     for (auto i : chars) {
