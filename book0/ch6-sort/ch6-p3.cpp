@@ -10,8 +10,7 @@ int main() {
     auto n {int {}};
     auto k {int {}};
     std::cin >> n >> k;
-    char lf[1] {};
-    std::cin.getline(lf, 1);
+    std::cin >> std::ws;
     auto s1 {std::string {}};
     std::getline(std::cin, s1);
     auto s2 {std::string {}};

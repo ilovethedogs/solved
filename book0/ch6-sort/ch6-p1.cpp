@@ -6,8 +6,7 @@
 int main() {
     auto n {int {}};
     std::cin >> n;
-    char lf[1] {};
-    std::cin.getline(lf, 1);
+    std::cin >> std::ws;
     auto v {std::vector<int> {}};
     auto temp {int {}};
     for (auto i {0}; i != n; ++i) {

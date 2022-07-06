@@ -5,8 +5,7 @@
 int main() {
     int n, m {};
     std::cin >> n >> m;
-    char lf[1] {};
-    std::cin.getline(lf, 1);
+    std::cin >> std::ws;
 
     char map_str[n * (m + 1) + 1] {};
     std::cin.getline(map_str, n * (m + 1), '#');

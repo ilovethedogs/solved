@@ -13,8 +13,7 @@ int main()
     std::cin >> initPos.first >> initPos.second >> curDir;
 
     char map[2 * n * m + 1]{};
-    char lf[1]{};
-    std::cin.getline(lf, 1);
+    std::cin >> std::ws;
     std::cin.getline(map, 2 * n * m, '#');
 
     int delta[4] {-2 * n, 2, 2 * n, -2};
