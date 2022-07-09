@@ -7,51 +7,28 @@
 #include <functional>
 #include <numeric>
 
-size_t sum(std::vector<size_t>& v, int mid) {
-    auto it {v.begin()};
-    std::advance(it, mid);
-    return std::accumulate(it, v.end(), 0, std::plus<>()) - (v.size() - mid) * v[mid];
+size_t ddeock(std::vector<size_t>& v, size_t mid, size_t sum) {
+    for (auto& i : v) {
+        sum -= i * (i < mid) + mid * (i >= mid);
+    }
+    return sum;
 }
 
 size_t bin_search(std::vector<size_t>& v, size_t m) {
-    auto low {size_t{}};
-    auto high {size_t{v.size() - 1}};
+    auto low {*std::min_element(v.begin(), v.end())};
+    auto high {*std::max_element(v.begin(), v.end())};
 
+    auto sum {std::accumulate(v.begin(), v.end(), 0, std::plus<>())};
     auto mid {size_t{}};
-    while (low != high) {
+    while (low <= high) {
         mid = (low + high) / 2;
-        auto s {sum(v, mid)};
-        if (s == m) return v[mid];
-        else if (s < m) low = mid + 1;
+        auto s {ddeock(v, mid, sum)};
+        if (s == m) return mid;
+        else if (s > m) low = mid + 1;
         else high = mid - 1;
     }
 
-    auto s {sum(v, low)};
-    std::cout << s << std::endl;
-    if (s == m) {
-        return v[low];
-    } 
-    else if (s < m) {
-        auto temp_sum {size_t{}};
-        for (auto i {v[low]}; i != v[low - 1] - 1; --i) {
-            temp_sum = 0;
-            for (auto j {low}; j != v.size(); ++j) {
-                temp_sum += v[j] - i;
-            }
-            if (temp_sum == m) return i;
-        }
-    }
-    else {
-        auto temp_sum {size_t{}};
-        for (auto i {v[low]}; i != v[low + 1] + 1; ++i) {
-            temp_sum = 0;
-            for (auto j {low}; j != v.size(); ++j) {
-                temp_sum += v[j] - i;
-            }
-            if (temp_sum == m) return i;
-        }
-    }
-    return 0;
+    return mid;
 }
 
 int main() {
@@ -69,7 +46,6 @@ int main() {
         ss >> temp;
         v.push_back(temp);
     }
-    std::sort(v.begin(), v.end());
 
     std::cout << bin_search(v, m) << std::endl;
     
