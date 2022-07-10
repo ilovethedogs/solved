@@ -2,8 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <unordered_map>
-#include <utility> 
+#include <iterator>
 #include <random>
 #include <chrono>
 
@@ -18,25 +17,15 @@ size_t get_recur(std::vector<int>::const_iterator begin, std::vector<int>::const
     return result;
 }
 
-auto um1 {std::unordered_map<std::pair<std::vector<int>::const_iterator, std::vector<int>::const_iterator>, size_t> {}};
-size_t get_recur_dp(std::vector<int>::const_iterator begin, std::vector<int>::const_iterator end) {
-    if (end <= begin || begin >= end) return 0;
-    auto iter {um1.find({begin, end})};
-    if (iter != um1.end()) return um1[{begin, end}];
-
-    auto result {size_t{}};
-    for (auto it {begin}; it != end; ++it) {
-        result = std::max(result, *it + get_recur_dp(begin, it - 1) + get_recur_dp(it + 2, end));
+size_t get_optimal(std::vector<int>& v) {
+    auto dp_v {std::vector<int> {}};
+    dp_v.push_back(v[0]);
+    dp_v.push_back(std::max(v[0], v[1]));
+    for (auto it {std::begin(v) + 2}; it != std::end(v); ++it) {
+        dp_v.push_back(std::max(*(it - 1), *(it - 2) + *it));
     }
-    um1.insert({{begin, end}, result});
-    return result;
-} 
-
-size_t get_iter(std::vector<int>::const_iterator begin, std::vector<int>::const_iterator end) {
-    auto result {size_t{}};
+    return *(std::end(v) - 1);
 }
-
-auto um2 {std::unordered_map<std::pair<std::vector<int>::const_iterator, std::vector<int>::const_iterator>, size_t> {}};
 
 int main() {
     /*
@@ -68,12 +57,6 @@ int main() {
     auto end {std::chrono::high_resolution_clock::now() - start};
     std::cout << result << " ";
     std::cout << "recursive: " << std::showpoint << std::chrono::duration<double, std::milli> (end).count() << "ms" << std::endl;
-
-    start = std::chrono::high_resolution_clock::now();
-    result = get_recur_dp(std::begin(test_v), std::end(test_v));
-    end = std::chrono::high_resolution_clock::now() - start;
-    std::cout << result << " ";
-    std::cout << "recursive + dp: " << std::showpoint << std::chrono::duration<double, std::milli> (end).count() << "ms" << std::endl;
 
     return 0;
 }
