@@ -27,6 +27,7 @@ void init()
     g2_f.clear();
     g3_m.clear();
     g3_f.clear();
+    loc.clear();
 }
 
 int add(int mId, int mGrade, char mGender[7], int mScore)
