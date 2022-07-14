@@ -1,6 +1,6 @@
 #include <iostream>
-#include <queue>
-#include <functional>
+#include <map>
+#include <vector>
 
 constexpr auto INF {1'000'000'000};
 
@@ -26,16 +26,32 @@ int main() {
         g[x][y] = z;
     }
 
-/*
-    for (auto i {1}; i != n + 1; ++i) {
-        for (auto j {1}; j != n + 1; ++j) {
-            std::cout << g[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-    */
+    auto v {std::vector<int> (n + 1, INF)};
+    auto done {std::vector<bool> {false}};
+    auto mm {std::multimap<int, int> {}};
+    mm.insert({0, c});
+    while (!mm.empty()) {
+        auto cur {*std::begin(mm)};
+        mm.erase(std::begin(mm));  
+        if (done[cur.second]) continue;
+        done[cur.second] = true;
 
-    auto pq {std::priority_queue<int, std::vector<int>, std::greater<int>};
+        for (auto row {cur.second}, col {1}; col != n + 1; ++col) {
+            if (g[row][col] != 0 && v[col] > g[row][col] + cur.first) {
+                v[col] = g[row][col] + cur.first;
+                mm.insert({v[col], col});
+            }
+        }
+    }
+
+    auto num_of_city {0};
+    auto time {0};
+    for (auto i : v)  {
+        num_of_city += (i != 0 && i != INF);
+        if (i != INF) time = std::max(time, i);
+    }
+
+    std::cout << num_of_city << " " << time << std::endl;
 
     return 0;
 }
